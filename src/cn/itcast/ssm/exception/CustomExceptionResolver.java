@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,7 +39,15 @@ public class CustomExceptionResolver implements HandlerExceptionResolver  {
 		//如果ex是系统 自定义的异常，直接取出异常信息
 		if(ex instanceof CustomException){
 			customException = (CustomException)ex;
-		}else{
+		}else if(ex instanceof UnauthorizedException){//无权限访问，跳转到无权访问页面
+			try{
+				request.getRequestDispatcher("/refuse.jsp").forward(request, response);
+			}catch(Exception e){
+				ex.printStackTrace();
+			}
+			return new ModelAndView();
+		}
+		else{
 			//针对非CustomException异常，对这类重新构造成一个CustomException，异常信息为“未知错误”
 			customException = new CustomException("未知错误");
 		}

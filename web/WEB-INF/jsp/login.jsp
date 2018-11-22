@@ -62,7 +62,7 @@
 						<TR>
 							<TD>用户名：</TD>
 							<TD colSpan="2"><input type="text" id="usercode"
-								name="usercode" style="WIDTH: 130px" /></TD>
+								name="username" style="WIDTH: 130px" /></TD>
 						</TR>
 						<TR>
 							<TD>密 码：</TD>
@@ -76,7 +76,10 @@
 								width="56" height="20" align='absMiddle' /> <a
 								href=javascript:randomcode_refresh()>刷新</a></TD>
 						</TR>
-
+						<tr>
+							<td></td>
+							<td><input type="checkbox" name="rememberme"/>自动登陆</td>
+						</tr>
 						<TR>
 							<TD colSpan="2" align="center"><input type="button"
 								class="btnalink" onclick="loginsubmit()" value="登&nbsp;&nbsp;录" />

@@ -3,20 +3,26 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	   xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop
 		http://www.springframework.org/schema/aop/spring-aop.xsd
-		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/tx/spring-tx.xsd ">
 
 	<!-- 使用spring组件扫描 -->
 	<context:component-scan base-package="cn.itcast.ssm.controller" />
 
+	<!--开启aop对类的代理-->
+	<aop:config proxy-target-class="true"/>
+
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"/>
+	</bean>
 	<!-- 静态资源 解析 -->
 	<mvc:resources location="/js/" mapping="/js/**" />
 	<mvc:resources location="/styles/" mapping="/styles/**" />
@@ -64,7 +70,7 @@
 		<property name="validator" ref="validator" />
 
 		<!-- propertyEditorRegistrars用于属性编辑器 -->
-		<!-- <property name="propertyEditorRegistrars"> <list> <ref bean="customPropertyEditor" 
+		<!-- <property name="propertyEditorRegistrars"> <list> <ref bean="customPropertyEditor"
 			/> </list> </property> -->
 	</bean>
 
@@ -79,6 +85,16 @@
 	<!-- 定义统一异常处理器 -->
 	<bean class="cn.itcast.ssm.exception.CustomExceptionResolver"></bean>
 
+	<!--使用shiro注解式授权的时候，applicationContext-shiro.xml中的无权自动跳转路径UnAuthorizedUrl将失效,
+	需要定义异常处理器SimpleMappingExceptionResolver，但是上面定义了自定义的异常处理器，
+	SimpleMappingExceptionResolver将失效，所以改成在自定义异常处理器中处理授权异常-->
+	<!--<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">refuse</prop>
+			</props>
+		</property>
+	</bean>-->
 	<!-- 注册属性编辑器 -->
 	<bean id="customPropertyEditor"
 		class="cn.itcast.ssm.controller.propertyeditor.CustomPropertyEditor"></bean>
@@ -96,10 +112,10 @@
 
 
 	<!--拦截器 -->
-	<mvc:interceptors>
-		<!--多个拦截器,顺序执行 -->
+	<!--<mvc:interceptors>
+		&lt;!&ndash;多个拦截器,顺序执行 &ndash;&gt;
 		<mvc:interceptor>
-			<!-- /**可以拦截路径不管多少层 -->
+			&lt;!&ndash; /**可以拦截路径不管多少层 &ndash;&gt;
 			<mvc:mapping path="/**" />
 			<bean class="cn.itcast.ssm.controller.interceptor.AuthenticateInterceptor"></bean>
 		</mvc:interceptor>
@@ -108,7 +124,7 @@
 			<mvc:mapping path="/**"/>
 			<bean class="cn.itcast.ssm.controller.interceptor.AuthorazitionInterceptor"/>
 		</mvc:interceptor>
-	</mvc:interceptors>
+	</mvc:interceptors>-->
 
 
 

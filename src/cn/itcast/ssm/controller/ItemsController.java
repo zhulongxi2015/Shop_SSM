@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,6 +67,7 @@ public class ItemsController {
 	}
 	//商品信息方法
 	@RequestMapping("/queryItems")
+	@RequiresPermissions("items:query")
 	public ModelAndView queryItems(HttpServletRequest request) throws Exception {
 		
 		System.out.println(request.getParameter("id"));
@@ -123,6 +125,7 @@ public class ItemsController {
 	
 	//方法返回 字符串，字符串就是逻辑视图名，Model作用是将数据填充到request域，在页面展示
 	@RequestMapping(value="/editItems",method={RequestMethod.GET})
+	@RequiresPermissions("items:update")
 	public String editItems(Model model,Integer id)throws Exception{
 		
 		//将id传到页面
@@ -172,6 +175,7 @@ public class ItemsController {
 	//itemsQueryVo是包装类型的pojo
 	//在@Validated中定义使用ValidGroup1组下边的校验
 	@RequestMapping("/editItemSubmit")
+	@RequiresPermissions("items:update")
 //	public String editItemSubmit(Integer id,ItemsCustom itemsCustom,
 //			ItemsQueryVo itemsQueryVo)throws Exception{
 	public String editItemSubmit(Model model,Integer id,
